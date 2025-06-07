@@ -1,7 +1,19 @@
 using GestaoEscolarApi.src.Data;
 using Microsoft.EntityFrameworkCore;
 
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowViteReactApp", builder =>
+    {
+        builder.WithOrigins("http://localhost:5173") // Removido a barra no final
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
 
 builder.Services.AddDbContext<GestaoEscolarContext>(opts =>
     opts.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -29,6 +41,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("AllowViteReactApp");
 app.UseAuthorization();
 
 app.MapControllers();
@@ -40,3 +53,4 @@ app.MapGet("/", context =>
 });
 
 app.Run();
+
