@@ -2,7 +2,7 @@ import React from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import TableAlunos from "../../components/TableAlunos/TableAlunos";
 
-const Clientes = () => {
+const AlunoPage = () => {
   return (
     <div className="flex min-h-screen">
       <Sidebar />
@@ -14,4 +14,4 @@ const Clientes = () => {
   )
 }
 
-export default Clientes
+export default AlunoPage

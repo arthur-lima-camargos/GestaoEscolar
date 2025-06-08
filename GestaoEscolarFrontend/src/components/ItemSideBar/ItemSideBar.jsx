@@ -2,17 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
 
-/**
- * @typedef {Object} ItemSideBarProps
- * @property {string} route
- * @property {boolean} isOpen
- * @property {React.ElementType} tagItem
- * @property {string} nameItem
- */
-
-/**
- * @param {ItemSideBarProps} props
- */
 const ItemSideBar = (props) => {
   const location = useLocation();
   const isActive = location.pathname === props.route;

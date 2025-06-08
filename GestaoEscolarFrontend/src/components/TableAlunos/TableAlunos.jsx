@@ -2,14 +2,6 @@ import React from "react";
 import { Link } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 
-/**
- * @typedef {Object} Aluno
- * @property {number} id
- * @property {string} nomeCompleto
- * @property {string} dataNascimento
- * @property {string} cpf
- */
-
 const fetchAlunos = async () => {
   const response = await fetch("https://localhost:7013/api/Alunos");
   if (!response.ok) {
