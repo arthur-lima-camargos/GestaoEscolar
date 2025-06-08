@@ -18,11 +18,12 @@ public class AlunoService : IAlunoService
 
     public async Task<AlunoDto> AddAsync(AlunoDto alunoDto)
     {
+        var cpfNumerico = new string(alunoDto.CPF.Where(char.IsDigit).ToArray());
         var aluno = new Aluno
         {
             NomeCompleto = alunoDto.NomeCompleto,
             DataNascimento = alunoDto.DataNascimento,
-            CPF = alunoDto.CPF
+            CPF = cpfNumerico
         };
 
         var alunoCriado = await _repository.AddAsync(aluno);
