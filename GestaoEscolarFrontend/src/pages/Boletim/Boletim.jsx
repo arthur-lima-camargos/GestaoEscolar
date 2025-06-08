@@ -1,22 +1,14 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import TableBoletim from "../../components/TableBoletim/TableBoletim";
 import AsyncSelect from 'react-select/async';
 import { useSelectedAluno, useSetSelectedAluno } from "../../hooks/useSelectedAluno";
 import { useAlunos } from "../../hooks/useAlunos";
 
-const { fetchAlunos } = useAlunos();
-
 const BoletimPage = () => {
   const { data: selectedAluno } = useSelectedAluno();
   const setSelectedAluno = useSetSelectedAluno();
-  
-  const { data: alunos = [], isLoading, isError } = useQuery({
-    queryKey: ["alunos"],
-    queryFn: fetchAlunos,
-  });
-  const loadOptions = async (input) => {    
+  const { alunos, isLoading, isError } = useAlunos();  const loadOptions = async (input) => {    
     const filteredAlunos = alunos.filter(aluno =>
       aluno.nomeCompleto.toLowerCase().includes(input.toLowerCase())
     );
