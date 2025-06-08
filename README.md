@@ -98,7 +98,7 @@ O frontend estará disponível em `http://localhost:5173`.
 - **Frontend**:
   - React
   - Vite
-  - CSS
+  - Tailwind CSS
 
 ## Contribuição
 
