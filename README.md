@@ -30,7 +30,7 @@ Certifique-se de ter as seguintes ferramentas instaladas em sua máquina:
    dotnet restore
    ```
 
-3. Configure o banco de dados no arquivo `appsettings.Development.json`.
+3. Configure o banco de dados no arquivo `appsettings.json`.
 
 4. Aplique as migrações para criar o banco de dados:
 
