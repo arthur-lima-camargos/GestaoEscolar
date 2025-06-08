@@ -87,7 +87,7 @@ const CadastroAlunoForm = ({ onSubmit, onClose }) => {
           />
           {errors.dataNascimento && <p className="text-red-500 text-sm">{errors.dataNascimento}</p>}
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-end gap-2">
           <button
             type="button"
             onClick={onClose}
@@ -97,7 +97,7 @@ const CadastroAlunoForm = ({ onSubmit, onClose }) => {
           </button>
           <button
             type="submit"
-            className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            className="p-2 bg-green-800 text-white rounded-md hover:bg-green-900"
           >
             Salvar
           </button>

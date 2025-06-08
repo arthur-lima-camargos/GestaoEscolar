@@ -16,7 +16,7 @@ export default function Sidebar() {
       }`}
     >
       <div className={`flex flex-wrap items-center w-full justify-between mt-2 mb-7 `}>
-        <h2 className={`text-xl font-semibold ${isOpen ? "" : "hidden" }`}>FixWise</h2>
+        <h2 className={`text-xl font-semibold ${isOpen ? "" : "hidden" }`}>SGE</h2>
         <IoMenu onClick={handleMenu} className={`cursor-pointer text-2xl ${isOpen ? "" : "" }`} />
       </div>
       <ListSideBar isOpen={isOpen} />

@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
-public class DisciplinaController : ControllerBase
+public class DisciplinasController : ControllerBase
 {
     private readonly IDisciplinaService _service;
 
-    public DisciplinaController(IDisciplinaService service)
+    public DisciplinasController(IDisciplinaService service)
     {
         _service = service;
     }
