@@ -1,20 +1,20 @@
 import React from "react";
 import Modal from "../Modal/Modal";
-import CadastroAlunoForm from "../CadastroAlunoForm/CadastroAlunoForm";
+import CadastroNotaForm from "../CadastroNotaForm/CadastroNotaForm";
 import SearchInput from "../SearchInput/SearchInput";
-import { useAlunos } from "../../hooks/useAlunos";
+import { useNotas } from "../../hooks/useNotas";
 
-const TableAlunos = () => {
+const TableNotas = () => {
   const {
-    alunos,
+    notas,
     isLoading,
     isError,
     isModalOpen,
     searchTerm,
     setModalOpen,
     setSearchTerm,
-    cadastrarAluno,
-  } = useAlunos();
+    cadastrarNota,
+  } = useNotas();
 
   if (isLoading) {
     return <div>Carregando...</div>;
@@ -30,19 +30,19 @@ const TableAlunos = () => {
         <SearchInput
           value={searchTerm}
           onChange={setSearchTerm}
-          placeholder="Pesquisar por nome ou CPF..."
+          placeholder="Pesquisar por aluno ou disciplina..."
         />
         <button
           onClick={() => setModalOpen(true)}
           className="p-2 bg-black text-white rounded-md hover:cursor-pointer hover:bg-gray-700 transition-colors duration-200"
         >
-          Cadastrar Aluno
+          Lançar Nota
         </button>
       </div>
 
       <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
-        <CadastroAlunoForm
-          onSubmit={cadastrarAluno}
+        <CadastroNotaForm
+          onSubmit={cadastrarNota}
           onClose={() => setModalOpen(false)}
         />
       </Modal>
@@ -52,23 +52,21 @@ const TableAlunos = () => {
           <thead>
             <tr className="bg-gray-900 text-white text-left text-sm uppercase">
               <th className="p-2 w-1/6">Id</th>
-              <th className="p-2 w-1/3">CPF</th>
-              <th className="p-2 w-1/2">Nome</th>
-              <th className="p-2 w-1/3">Data de Nascimento</th>
+              <th className="p-2 w-1/6">Nota</th>
+              <th className="p-2 w-1/3">Aluno</th>
+              <th className="p-2 w-1/3">Disciplina</th>
             </tr>
           </thead>
           <tbody>
-            {alunos.map((aluno, index) => (
+            {notas.map((nota, index) => (
               <tr
-                key={aluno.id}
+                key={nota.id}
                 className={index % 2 === 0 ? "bg-white" : "bg-[#edeeec]"}
               >
-                <td className="p-2">{aluno.id}</td>
-                <td className="p-2">{aluno.cpf}</td>
-                <td className="p-2">{aluno.nomeCompleto}</td>
-                <td className="p-2">
-                  {new Date(aluno.dataNascimento).toLocaleDateString("pt-BR")}
-                </td>
+                <td className="p-2">{nota.id}</td>
+                <td className="p-2">{nota.valor.toFixed(2)}</td>
+                <td className="p-2">{nota.nomeAluno}</td>
+                <td className="p-2">{nota.nomeDisciplina}</td>
               </tr>
             ))}
           </tbody>
@@ -78,4 +76,4 @@ const TableAlunos = () => {
   );
 };
 
-export default TableAlunos;
+export default TableNotas;

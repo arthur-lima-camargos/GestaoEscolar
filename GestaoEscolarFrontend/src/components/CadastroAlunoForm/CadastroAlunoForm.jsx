@@ -3,107 +3,103 @@ import PropTypes from "prop-types";
 
 const CadastroAlunoForm = ({ onSubmit, onClose }) => {
   const [cpf, setCpf] = useState("");
-  const [nomeCompleto, setNomeCompleto] = useState("");
-  const [dataNascimento, setDataNascimento] = useState("");
-  const [errors, setErrors] = useState({});
+  const [nome, setNome] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleCpfChange = (e) => {
-    const value = e.target.value.replace(/\D/g, "").slice(0, 11); 
-    setCpf(
-      value
+    const value = e.target.value.replace(/\D/g, "");
+    if (value.length <= 11) {
+      const formattedCpf = value
         .replace(/(\d{3})(\d)/, "$1.$2")
         .replace(/(\d{3})\.(\d{3})(\d)/, "$1.$2.$3")
-        .replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/, "$1.$2.$3-$4")
-    );
+        .replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/, "$1.$2.$3-$4");
+      setCpf(formattedCpf);
+    }
   };
 
   const handleNomeChange = (e) => {
-    const value = e.target.value.slice(0, 100); 
-    setNomeCompleto(value);
-    if (/[^a-zA-ZçÇ\s]/.test(value)) { 
-      setErrors((prev) => ({ ...prev, nomeCompleto: "O nome não pode conter caracteres especiais." }));
-    } else {
-      setErrors((prev) => ({ ...prev, nomeCompleto: null }));
-    }
-  };
-
-  const handleDataNascimentoChange = (e) => {
     const value = e.target.value;
-    setDataNascimento(value);
-    if (new Date(value) > new Date()) {
-      setErrors((prev) => ({ ...prev, dataNascimento: "A data de nascimento não pode ser maior que hoje." }));
+
+    if (/[^a-záàâãéèêíïóôõöúçñA-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]/.test(value)) {
+      setErrorMessage(
+        "O nome não pode conter caracteres especiais ou números"
+      );
     } else {
-      setErrors((prev) => ({ ...prev, dataNascimento: null }));
+      setErrorMessage("");
     }
-  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!errors.nomeCompleto && !errors.dataNascimento) {
-      const formData = new FormData(e.target);
-      const formObject = Object.fromEntries(formData);
-
-      onSubmit(formObject); 
-    }
+    setNome(value);
   };
 
   return (
-    <>
-      <h2 className="text-xl font-semibold mb-4">Cadastrar Aluno</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">CPF</label>
-          <input
-            type="text"
-            name="cpf"
-            value={cpf}
-            onChange={handleCpfChange}
-            className="w-full border rounded-md p-2"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Nome Completo</label>
-          <input
-            type="text"
-            name="nomeCompleto"
-            value={nomeCompleto}
-            onChange={handleNomeChange}
-            className="w-full border rounded-md p-2"
-            required
-          />
-          {errors.nomeCompleto && <p className="text-red-500 text-sm">{errors.nomeCompleto}</p>}
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Data de Nascimento</label>
-          <input
-            type="date"
-            name="dataNascimento"
-            value={dataNascimento}
-            onChange={handleDataNascimentoChange}
-            className="w-full border rounded-md p-2"
-            max={new Date().toISOString().split("T")[0]} 
-            required
-          />
-          {errors.dataNascimento && <p className="text-red-500 text-sm">{errors.dataNascimento}</p>}
-        </div>
-        <div className="flex justify-end gap-2">
-          <button
-            type="button"
-            onClick={onClose}
-            className="p-2 bg-black text-white rounded-md hover:cursor-pointer hover:bg-gray-600"
-          >
-            Voltar
-          </button>
-          <button
-            type="submit"
-            className="p-2 bg-green-800 text-white rounded-md hover:bg-green-900"
-          >
-            Salvar
-          </button>
-        </div>
-      </form>
-    </>
+    <form onSubmit={onSubmit} className="p-4">
+      <h2 className="text-xl font-bold mb-4">Cadastrar Aluno</h2>
+      <div className="mb-4">
+        <label htmlFor="cpf" className="block mb-2">
+          CPF
+        </label>
+        <input
+          type="text"
+          id="cpf"
+          name="cpf"
+          value={cpf}
+          onChange={handleCpfChange}
+          placeholder="000.000.000-00"
+          required
+          maxLength={14}
+          className="w-full p-2 border rounded"
+        />
+      </div>
+      <div className="mb-4">
+        <label htmlFor="nomeCompleto" className="block mb-2">
+          Nome Completo
+        </label>
+        <input
+          type="text"
+          id="nomeCompleto"
+          name="nomeCompleto"
+          value={nome}
+          onChange={handleNomeChange}
+          required
+          maxLength={100}
+          className={`w-full p-2 border rounded ${
+            errorMessage ? "border-red-500" : ""
+          }`}
+        />
+        {errorMessage && (
+          <p className="text-red-500 text-sm mt-1">{errorMessage}</p>
+        )}
+      </div>
+      <div className="mb-4">
+        <label htmlFor="dataNascimento" className="block mb-2">
+          Data de Nascimento
+        </label>
+        <input
+          type="date"
+          id="dataNascimento"
+          name="dataNascimento"
+          required
+          max={new Date().toISOString().split("T")[0]}
+          className="w-full p-2 border rounded"
+        />
+      </div>
+      <div className="flex justify-end gap-2">
+        <button
+          type="button"
+          onClick={onClose}
+          className="p-2 bg-black text-white rounded-md hover:cursor-pointer hover:bg-gray-600"
+        >
+          Voltar
+        </button>
+        <button
+          type="submit"
+          className="p-2 bg-green-800 text-white rounded-md hover:bg-green-900"
+          disabled={!!errorMessage}
+        >
+          Salvar
+        </button>
+      </div>
+    </form>
   );
 };
 
