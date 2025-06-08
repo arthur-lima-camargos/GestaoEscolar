@@ -103,3 +103,13 @@ O frontend estará disponível em `http://localhost:5173`.
 ## Contribuição
 
 Contribuições são bem-vindas! Sinta-se à vontade para abrir issues e pull requests.
+
+## Próximos Passos
+
+1. **Autenticação e Autorização**:
+
+   - Implementar um sistema de login e registro de usuários.
+   - Adicionar suporte a diferentes níveis de acesso (administrador, professor, aluno).
+
+2. **Dashboard Personalizado**:
+   - Criar um painel de controle para exibir informações relevantes para o usuário.
