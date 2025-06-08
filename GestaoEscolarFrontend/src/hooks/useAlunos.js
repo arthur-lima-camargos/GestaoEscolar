@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
+const API_BASE_URL = "https://localhost:7013/api";
+
 const fetchAlunos = async () => {
-  const response = await fetch("https://localhost:7013/api/Alunos");
+  const response = await fetch(API_BASE_URL + "/Alunos");
   if (!response.ok) {
     throw new Error("Erro ao buscar alunos");
   }
@@ -36,21 +38,33 @@ export const useAlunos = () => {
       };
 
       try {
-        const response = await fetch("https://localhost:7013/api/Alunos", {
+        const response = await fetch(API_BASE_URL + "/Alunos", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(input),
         });
 
+        const responseText = await response.text();
+        let data;
+        try {
+          data = JSON.parse(responseText);
+        } catch {
+          data = { message: responseText };
+        }
+
         if (!response.ok) {
-          throw new Error("Erro ao cadastrar aluno");
+          if (responseText.includes("CPF já existe")) {
+            throw new Error("CPF já cadastrado no sistema");
+          }
+          throw new Error(data.message || "Erro ao cadastrar aluno");
         }
 
         setModalOpen(false);
         queryClient.invalidateQueries(["alunos"]);
         alert("Aluno cadastrado com sucesso!");
+        return null;
       } catch (error) {
-        alert(error.message);
+        return error.message;
       }
     }
   };
@@ -64,5 +78,6 @@ export const useAlunos = () => {
     setModalOpen,
     setSearchTerm,
     cadastrarAluno,
+    fetchAlunos,
   };
 };

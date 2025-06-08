@@ -27,6 +27,7 @@ public class AlunosController : ControllerBase
             return BadRequest(ModelState);
 
         var alunoCriado = await _service.AddAsync(alunoDto);
+        
         return CreatedAtAction(nameof(GetAlunos), new { id = alunoCriado.Id }, alunoCriado);
     }
 }

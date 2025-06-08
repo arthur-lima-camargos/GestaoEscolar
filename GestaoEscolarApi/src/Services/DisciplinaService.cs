@@ -18,6 +18,11 @@ public class DisciplinaService : IDisciplinaService
 
     public async Task<DisciplinaDto> AddAsync(DisciplinaDto disciplinaDto)
     {
+        if (await isDisciplinaExists(disciplinaDto.Nome))
+        {
+            throw new InvalidOperationException("Disciplina com esse Nome já existe no banco de dados.");
+        }
+
         var disciplina = new Disciplina
         {
             Codigo = disciplinaDto.Codigo,
@@ -26,6 +31,12 @@ public class DisciplinaService : IDisciplinaService
 
         var disciplinaCriada = await _repository.AddAsync(disciplina);
         return MapToDto(disciplinaCriada);
+    }
+
+    public async Task<bool> isDisciplinaExists(string nome)
+    {
+        var alunos = await _repository.GetAllAsync();
+        return alunos.Any(a => a.Nome == nome);
     }
 
     private DisciplinaDto MapToDto(Disciplina disciplina)

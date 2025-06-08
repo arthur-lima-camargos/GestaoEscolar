@@ -4,7 +4,8 @@ import PropTypes from "prop-types";
 const CadastroAlunoForm = ({ onSubmit, onClose }) => {
   const [cpf, setCpf] = useState("");
   const [nome, setNome] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [nomeError, setNomeError] = useState("");
+  const [cpfError, setCpfError] = useState("");
 
   const handleCpfChange = (e) => {
     const value = e.target.value.replace(/\D/g, "");
@@ -14,6 +15,7 @@ const CadastroAlunoForm = ({ onSubmit, onClose }) => {
         .replace(/(\d{3})\.(\d{3})(\d)/, "$1.$2.$3")
         .replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/, "$1.$2.$3-$4");
       setCpf(formattedCpf);
+      setCpfError("");
     }
   };
 
@@ -21,18 +23,30 @@ const CadastroAlunoForm = ({ onSubmit, onClose }) => {
     const value = e.target.value;
 
     if (/[^a-záàâãéèêíïóôõöúçñA-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]/.test(value)) {
-      setErrorMessage(
-        "O nome não pode conter caracteres especiais ou números"
-      );
+      setNomeError("O nome não pode conter caracteres especiais ou números");
     } else {
-      setErrorMessage("");
+      setNomeError("");
     }
 
     setNome(value);
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!nomeError) {
+      const error = await onSubmit(e);
+      if (error) {
+        if (error.toLowerCase().includes("cpf")) {
+          setCpfError(error);
+        } else {
+          alert(error);
+        }
+      }
+    }
+  };
+
   return (
-    <form onSubmit={onSubmit} className="p-4">
+    <form onSubmit={handleSubmit} className="p-4">
       <h2 className="text-xl font-bold mb-4">Cadastrar Aluno</h2>
       <div className="mb-4">
         <label htmlFor="cpf" className="block mb-2">
@@ -47,8 +61,11 @@ const CadastroAlunoForm = ({ onSubmit, onClose }) => {
           placeholder="000.000.000-00"
           required
           maxLength={14}
-          className="w-full p-2 border rounded"
+          className={`w-full p-2 border rounded ${
+            cpfError ? "border-red-500" : ""
+          }`}
         />
+        {cpfError && <p className="text-red-500 text-sm mt-1">{cpfError}</p>}
       </div>
       <div className="mb-4">
         <label htmlFor="nomeCompleto" className="block mb-2">
@@ -63,11 +80,11 @@ const CadastroAlunoForm = ({ onSubmit, onClose }) => {
           required
           maxLength={100}
           className={`w-full p-2 border rounded ${
-            errorMessage ? "border-red-500" : ""
+            nomeError ? "border-red-500" : ""
           }`}
         />
-        {errorMessage && (
-          <p className="text-red-500 text-sm mt-1">{errorMessage}</p>
+        {nomeError && (
+          <p className="text-red-500 text-sm mt-1">{nomeError}</p>
         )}
       </div>
       <div className="mb-4">
@@ -94,7 +111,7 @@ const CadastroAlunoForm = ({ onSubmit, onClose }) => {
         <button
           type="submit"
           className="p-2 bg-green-800 text-white rounded-md hover:bg-green-900"
-          disabled={!!errorMessage}
+          disabled={!!nomeError}
         >
           Salvar
         </button>

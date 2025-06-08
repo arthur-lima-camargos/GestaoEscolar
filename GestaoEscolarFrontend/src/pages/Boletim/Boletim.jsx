@@ -4,14 +4,9 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import TableBoletim from "../../components/TableBoletim/TableBoletim";
 import AsyncSelect from 'react-select/async';
 import { useSelectedAluno, useSetSelectedAluno } from "../../hooks/useSelectedAluno";
+import { useAlunos } from "../../hooks/useAlunos";
 
-const fetchAlunos = async () => {
-  const response = await fetch("https://localhost:7013/api/Alunos");
-  if (!response.ok) {
-    throw new Error("Erro ao buscar alunos");
-  }
-  return response.json();
-};
+const { fetchAlunos } = useAlunos();
 
 const BoletimPage = () => {
   const { data: selectedAluno } = useSelectedAluno();

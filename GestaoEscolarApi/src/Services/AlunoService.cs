@@ -19,6 +19,12 @@ public class AlunoService : IAlunoService
     public async Task<AlunoDto> AddAsync(AlunoDto alunoDto)
     {
         var cpfNumerico = new string(alunoDto.CPF.Where(char.IsDigit).ToArray());
+
+        if (await isAlunoExists(cpfNumerico))
+        {
+            throw new InvalidOperationException("Aluno com esse CPF já existe no banco de dados.");
+        }
+
         var aluno = new Aluno
         {
             NomeCompleto = alunoDto.NomeCompleto,
@@ -28,6 +34,13 @@ public class AlunoService : IAlunoService
 
         var alunoCriado = await _repository.AddAsync(aluno);
         return MapToDto(alunoCriado);
+    }
+
+    public async Task<bool> isAlunoExists(string cpf)
+    {
+        var cpfNumerico = new string(cpf.Where(char.IsDigit).ToArray());
+        var alunos = await _repository.GetAllAsync();
+        return alunos.Any(a => a.CPF == cpfNumerico);
     }
 
     private AlunoDto MapToDto(Aluno aluno)
